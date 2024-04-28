@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import Task from './Componets/Task';
 
 export default function App() {
@@ -18,15 +18,20 @@ export default function App() {
     setTasks(tasks.filter(task => task.id !== id));
   };
 
+  const editTask = (id, newText) => {
+    setTasks(tasks.map(task =>
+      task.id === id ? { ...task, text: newText } : task
+    ));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.taskWrapper}>
-        <Text style={styles.titleSection}>To-do List</Text>
+        <Text  style={styles.titleSection}>To-do List</Text>
         <ScrollView style={styles.scrollView}>
           <View style={styles.taskList}>
-
-             {tasks.map(task => (
-              <Task key={task.id} text={task.text} onDelete={() => deleteTask(task.id)} />
+            {tasks.map(task => (
+              <Task key={task.id} id={task.id} text={task.text} onDelete={() => deleteTask(task.id)} onEdit={editTask} />
             ))}
           </View>
         </ScrollView>
@@ -51,6 +56,7 @@ export default function App() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
